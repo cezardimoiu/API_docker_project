@@ -5,6 +5,7 @@ services:
         image: postgres
         networks:
           - myNetwork
+          - second-network
         volumes:
             - "${PWD}/Database/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql"
             - pgdata:/var/lib/postgresql/data 
@@ -33,9 +34,9 @@ services:
         ports:
             - 8080:8080
         networks:
-            - myNetwork
+            - second-network
 networks:
     myNetwork:
-  
+    second-network:
 volumes:
     pgdata:
