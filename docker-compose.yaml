@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+    project-db:
+        image: postgres
+        networks:
+          - myNetwork
+        volumes:
+            - "${PWD}/Database/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql"
+            - pgdata:/var/lib/postgresql/data 
+        environment:
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: admin
+            POSTGRES_DB: medicine
+
+    api:
+        build: ./API/.
+        ports: 
+            - 5555:80
+        environment:
+            PGUSER: admin
+            PGPASSWORD: admin
+            PGDATABASE: medicine
+            PGHOST: project-db
+            PGPORT: 5432
+        networks:
+            - myNetwork
+        depends_on:
+            - project-db
+
+    adminer:
+        image: adminer
+        ports:
+            - 8080:8080
+        networks:
+            - myNetwork
+networks:
+    myNetwork:
+  
+volumes:
+    pgdata:
