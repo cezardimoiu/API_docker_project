@@ -10,22 +10,29 @@ services:
             - "${PWD}/Database/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql"
             - pgdata:/var/lib/postgresql/data 
         environment:
-            POSTGRES_USER: admin
-            POSTGRES_PASSWORD: admin
+            POSTGRES_USER_FILE: /run/secrets/user-secret
+            POSTGRES_PASSWORD_FILE: /run/secrets/password-secret
             POSTGRES_DB: medicine
+        secrets:
+            - user-secret
+            - password-secret
 
     api:
-        build: ./API/.
+        build: './API'
         ports: 
             - 5555:80
         environment:
-            PGUSER: admin
-            PGPASSWORD: admin
+            NODE_ENV: staging
+            PGUSER_SECRET: user-secret
+            PGPASSWORD_SECRET: password-secret
             PGDATABASE: medicine
             PGHOST: project-db
             PGPORT: 5432
         networks:
             - myNetwork
+        secrets:
+            - user-secret
+            - password-secret
         depends_on:
             - project-db
 
@@ -38,5 +45,12 @@ services:
 networks:
     myNetwork:
     second-network:
+
 volumes:
     pgdata:
+
+secrets:
+    password-secret:
+        file: ./secrets/db-password-secret.txt
+    user-secret:
+        file: ./secrets/db-user-secret.txt
