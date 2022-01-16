@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  api:
+    image: api
+    build: 
+      context: './API'
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 100M
+      restart_policy:
+        condition: on-failure
+      placement:
+        max_replicas_per_node: 2
+        constraints:
+          - "node.role==worker"
+    environment:
+      PORT: 8000
+      PGHOST: db
+      PGDATABASE: medicine
+      PGPORT: 5432
+      PGUSER: admin
+      PGPASSWORD: admin
+      AMQPURL: amqp://rabbitmq
+    ports:
+      - 9000:8000
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    networks:
+      - myNetwork
+  procesator:
+    image: procesator
+    build: 
+      context: './Procesator'
+      dockerfile: Dockerfile
+    deploy:
+      placement:
+        constraints:
+          - "node.role==manager"
+    environment:
+      PORT: 8000
+      PGHOST: db
+      PGDATABASE: medicine
+      PGPORT: 5432
+      PGUSER: admin
+      PGPASSWORD: admin
+      AMQPURL: amqp://rabbitmq
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    networks:
+      - myNetwork
+
+  db: 
+    image: postgres
+    restart: always
+    networks:
+      - myNetwork
+      - second-network
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: medicine
+    volumes:
+      - ./Database/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - pgdata:/var/lib/postgresql/data 
+    deploy:
+      placement:
+        constraints:
+          - "node.role==manager"
+
+  rabbitmq:
+    image: rabbitmq:3
+    networks:
+      - myNetwork
+    deploy:
+      placement:
+        constraints:
+          - "node.role==manager"
+
+  adminer:
+    image: adminer
+    deploy:
+      placement:
+        constraints:
+          - "node.role==worker"
+    ports:
+        - 8080:8080
+    networks:
+        - second-network
+
+  registry:
+    image: registry
+    ports:
+      - 5000:5000
+
+networks:
+  myNetwork:
+  second-network:
+
+volumes:
+    pgdata:

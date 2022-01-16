@@ -1,6 +1,8 @@
-CREATE TABLE IF NOT EXISTS medicine (
+CREATE TABLE IF NOT EXISTS books (
     id serial PRIMARY KEY,
-    med_name varchar NOT NULL,
-    quantity integer NOT NULL,
-    med_description varchar
+    name varchar,
+    author varchar,
+    description varchar,
+    price varchar,
+    inserted_at timestamp
 );
