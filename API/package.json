@@ -1,13 +1,13 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "Api for Lab Kubernetes Example",
+  "description": "CC Project",
   "main": "start.js",
   "scripts": {
     "start-local": "nodemon ./Web/start.js",
     "start": "node ./Web/start.js"
   },
-  "author": "Alexandru Hogea",
+  "author": "Cezar Dimoiu",
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.8.0",

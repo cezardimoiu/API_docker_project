@@ -6,7 +6,7 @@ const {
     ExecuteQuery
 } = require('./Database');
 
-const QUEUE = 'books';
+const QUEUE = 'medicine';
 
 amqp.connect(process.env.AMQPURL, (error0, connection) => {
     if (error0) {
@@ -29,7 +29,7 @@ amqp.connect(process.env.AMQPURL, (error0, connection) => {
             if (msg !== null) {
                 const jsonPayload = JSON.parse(msg.content);
                 try {
-                    await ExecuteQuery("INSERT INTO books (name, description, author, price, inserted_at) VALUES ($1, $2, $3, $4, $5)", [jsonPayload.name, jsonPayload.description, jsonPayload.author, jsonPayload.price, new Date()]);
+                    await ExecuteQuery("INSERT INTO medicine (name, description, producer, price, inserted_at) VALUES ($1, $2, $3, $4, $5)", [jsonPayload.name, jsonPayload.description, jsonPayload.producer, jsonPayload.price, new Date()]);
                 } catch (err) {
                     console.error(err);
                 }

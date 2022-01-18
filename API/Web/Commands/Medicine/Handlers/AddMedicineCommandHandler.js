@@ -1,6 +1,6 @@
 const MessageQueue = require('../../../../Infrastructure/RabbitMQ');
 
-const QUEUE = 'books';
+const QUEUE = 'medicine';
 
 /**
  * 
