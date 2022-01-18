@@ -1,13 +1,13 @@
 const express = require('express');
 
-const GetMedicinesQueryHandler = require('../../Queries/Medicine/Handlers/GetMedicinesQueryHandler.js');
+const GetMedicineQueryHandler = require('../../Queries/Medicine/Handlers/GetMedicineQueryHandler.js');
 
 const Router = express.Router();
 
 Router.get('/', async (req, res) => {
     
     try {
-        var medicine = await GetMedicinesQueryHandler.QueryAsync();
+        var medicine = await GetMedicineQueryHandler.QueryAsync();
         res.json(medicine);
     } catch (err) {
         console.error(err);
