@@ -1,17 +1,17 @@
 const express = require('express');
 
-const AddBookCommandHandler = require('../../Commands/Books/Handlers/AddBookCommandHandler.js');
+const AddMedicineCommandHandler = require('../../Commands/Medicine/Handlers/AddMedicineCommandHandler.js');
 const {
-    AddBookCommand
-} = require ('../../Commands/Books/Models/AddBookCommand.js');
+    AddMedicineCommand
+} = require ('../../Commands/Medicine/Models/AddMedicineCommand.js');
 
 const Router = express.Router();
 
 Router.post('/', async (req, res) => {
     
-    const bookCommand = new AddBookCommand(req.body);
+    const medicineCommand = new AddMedicineCommand(req.body);
     try {
-        AddBookCommandHandler.HandleAsync(bookCommand);
+        AddMedicineCommandHandler.HandleAsync(medicineCommand);
         res.status(201).end();
     } catch (err) {
         console.error(err);

@@ -4,11 +4,11 @@ const QUEUE = 'medicine';
 
 /**
  * 
- * @param {AddBookCommand} bookCommand 
+ * @param {AddMedicineCommand} medicineCommand 
  */
-const HandleAsync = async (bookCommand) => {
+const HandleAsync = async (medicineCommand) => {
 
-    await MessageQueue.PublishMessageAsync(QUEUE, bookCommand);
+    await MessageQueue.PublishMessageAsync(QUEUE, medicineCommand);
 };
 
 module.exports = {

@@ -98,6 +98,17 @@ services:
     image: registry
     ports:
       - 5000:5000
+      
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+        - 8081:8080
+    deploy:
+      placement:
+        constraints:
+          - "node.role==manager"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
 
 networks:
   myNetwork:
